@@ -1,0 +1,430 @@
+openapi: 3.0.1
+info:
+  title: Studer SCOM API
+  description: HTTP JSON API to communicate with the devices on the Studer SCOM bus via the Studer XCom 232i
+  version: 0.0.1
+  contact: 
+    name: Dominic Miglar 
+    email: dominic.miglar@logreposit.com
+
+servers:
+  - url: http://localhost:8000/v1
+    description: Localhost Server 1
+  - url: http://localhost:8001/v1
+    description: Localhost Server 2
+
+paths:
+  /devices:
+    get:   
+      summary: Returns a list of possible device addresses
+      operationId: ListDevices
+      tags:
+        - Devices
+      description: Returns a list of all possible device addresses including type information
+      responses:
+        '200':
+          description: A JSON Object containing paginated response data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginationResponse'
+                  - properties:
+                      items:
+                        description: List of Devices
+                        items:
+                          $ref: '#/components/schemas/Device'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+  /devices/{device_id}/user-infos/{object_id}/value:
+    get:
+      summary: Returns the current value of the user-info object with the given id
+      operationId: GetUserInfoValue
+      tags:
+        - Object Infos
+      description: Returns the current value of the user-info object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema: 
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+        - name: format
+          in: query
+          description: Format of the objects property data
+          style: form
+          required: true
+          schema:
+            example: FLOAT
+            allOf:
+              - $ref: '#/components/schemas/ScomDataType'
+      responses:
+        '200':
+          description: A JSON Object containing the requested user-info object value
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BoolValue'
+                  - $ref: '#/components/schemas/FloatValue'
+                  - $ref: '#/components/schemas/Int32Value'
+                  - $ref: '#/components/schemas/ShortEnumValue'
+                  - $ref: '#/components/schemas/LongEnumValue'
+                discriminator:
+                  propertyName: format
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+  /devices/{device_id}/parameters/{object_id}/value:
+    get:
+      summary: Returns the current value of the parameter object with the given id
+      operationId: GetParameterValue
+      tags:
+        - Parameters
+      description: Returns the set value of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema: 
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+        - name: format
+          in: query
+          description: Format of the objects property data
+          style: form
+          required: true
+          schema:
+            example: FLOAT
+            allOf:
+              - $ref: '#/components/schemas/ScomDataType'
+      responses:
+        '200':
+          description: A JSON Object containing the requested parameter object value
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BoolValue'
+                  - $ref: '#/components/schemas/FloatValue'
+                  - $ref: '#/components/schemas/Int32Value'
+                  - $ref: '#/components/schemas/ShortEnumValue'
+                  - $ref: '#/components/schemas/LongEnumValue'
+                discriminator:
+                  propertyName: format
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+    put:
+      summary: Updates the value of the parameter object with the given id
+      operationId: UpdateParameterValue
+      tags:
+        - Parameters
+      description: Updates the value of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+        - name: format
+          in: query
+          description: Format of the objects property data
+          style: form
+          required: true
+          schema:
+            example: FLOAT
+            allOf:
+              - $ref: '#/components/schemas/ScomDataType'
+      requestBody:
+        description: A JSON Object containing the parameter object value to be written
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/BoolValue'
+                - $ref: '#/components/schemas/FloatValue'
+                - $ref: '#/components/schemas/Int32Value'
+                - $ref: '#/components/schemas/ShortEnumValue'
+                - $ref: '#/components/schemas/LongEnumValue'
+              discriminator:
+                propertyName: format
+      responses:
+        '200':
+          description: A JSON Object containing the updated parameter object value
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BoolValue'
+                  - $ref: '#/components/schemas/FloatValue'
+                  - $ref: '#/components/schemas/Int32Value'
+                  - $ref: '#/components/schemas/ShortEnumValue'
+                  - $ref: '#/components/schemas/LongEnumValue'
+                discriminator:
+                  propertyName: format
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+
+components:
+  schemas:
+    ApiError:
+      type: object
+      title: ApiError
+      properties:
+        message:
+          type: string
+          description: Detailed Error Message
+          example: This will be a detailed error message
+        scom:
+          description: scom error object if present
+          allOf:
+            - $ref: '#/components/schemas/ScomError'
+    ScomError:
+      type: object
+      title: ScomError
+      properties:
+        name:
+          description: scom error name
+          example: PROPERTY_IS_READ_ONLY
+          allOf:
+            - $ref: '#/components/schemas/ScomErrorName'
+        meaning:
+          type: string
+          description: scom error message
+          example: a writing to this property is not allowed
+        errorId:
+          type: integer
+          description: scom error id
+          example: 37
+    PaginationResponse:
+      type: object
+      title: PaginationResponse
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+          description: Number of total elements available
+          example: 15
+        items:
+          description: List of the actual response objects
+          type: array
+          items:
+            type: object
+    Device:
+      type: object
+      title: Device
+      properties:
+        address:
+          type: integer
+          description: Address on the device on the Communication Bus
+          example: 101
+        deviceType:
+          description: Type of the Device
+          example: XTENDER
+          allOf:
+            - $ref: '#/components/schemas/DeviceType'
+        addressType:
+          description: Communication Type of the Device with this address
+          example: UNICAST
+          allOf:
+            - $ref: '#/components/schemas/AddressType'
+    DeviceType:
+      title: DeviceType
+      description: Device Type
+      type: string
+      enum:
+        - ALL
+        - XTENDER
+        - VARIOTRACK
+        - XCOM232I
+        - BSP
+        - VARIOSTRING
+    AddressType:
+      title: AddressType
+      description: Communication Type of the Address
+      type: string
+      enum:
+        - UNICAST
+        - MULTICAST
+        - BROADCAST
+    ScomErrorName:
+      title: ScomErrorName
+      description: scom error name
+      type: string
+      enum:
+        - INVALID_FRAME
+        - DEVICE_NOT_FOUND
+        - RESPONSE_TIMEOUT
+        - PROPERTY_IS_READ_ONLY
+    ScomProperty:
+      type: object
+      title: ScomProperty
+      properties:
+        objectId:
+          type: integer
+          description: ID of the scom object
+          example: 1523
+        property:
+          description: property name
+          example: VALUE
+          allOf:
+            - $ref: '#/components/schemas/ScomPropertyType'
+        objectName:
+          type: string
+          description: 'name of the scom object'
+          example: 'Grid feeding allowed'
+        objectDescription:
+          type: string
+          description: 'object description, TODO'
+          example: 'TODO'
+    ScomPropertyType:
+      title: ScomPropertyType
+      description: type of scom property
+      type: string
+      enum:
+        - VALUE
+        - UNSAVED_VALUE
+        - MIN
+        - MAX
+        - LEVEL
+    ScomDataType:
+      title: ScomDataType
+      description: type of scom data field
+      type: string
+      enum:
+        - BOOL
+        - FORMAT
+        - SHORT_ENUM
+        - LONG_ENUM
+        - ERROR
+        - INT32
+        - FLOAT
+        - STRING
+        - BYTE_STREAM
+    Value:
+      title: Value
+      description: scom value
+      type: object
+      required:
+        - format
+      properties:
+        format:
+          description: Format of the data property
+          example: BOOL
+          allOf:
+            - $ref: '#/components/schemas/ScomDataType'
+      discriminator:
+        propertyName: format
+        mapping:
+          BOOL: '#/components/schemas/BoolValue'
+          FLOAT: '#/components/schemas/FloatValue'
+          SHORT_ENUM: '#/components/schemas/ShortEnumValue'
+          LONG_ENUM: '#/components/schemas/LongEnumValue'
+          INT32: '#/components/schemas/Int32Value'
+          STRING: '#/components/schemas/StringValue'
+    BoolValue:
+      title: BoolValue
+      required:
+        - data
+      allOf:
+        - $ref: '#/components/schemas/Value'
+        - properties:
+            data:
+              type: boolean
+              description: scom bool value
+              example: false
+    FloatValue:
+      title: FloatValue
+      required:
+        - data
+      allOf:
+        - $ref: '#/components/schemas/Value'
+        - properties:
+            data:
+              type: number
+              description: scom float value
+              example: 23.7603
+    Int32Value:
+      title: Int32Value
+      required:
+        - data
+      allOf:
+        - $ref: '#/components/schemas/Value'
+        - properties:
+            data:
+              type: integer
+              description: scom int32 value
+              example: 128
+    ShortEnumValue:
+      title: ShortEnumValue
+      required:
+        - data
+      allOf:
+        - $ref: '#/components/schemas/Value'
+        - properties:
+            data:
+              type: integer
+              description: scom short enum value
+              example: 128
+    LongEnumValue:
+      title: LongEnumValue
+      required:
+        - data
+      allOf:
+        - $ref: '#/components/schemas/Value'
+        - properties:
+            data:
+              type: integer
+              description: scom long enum value
+              example: 128

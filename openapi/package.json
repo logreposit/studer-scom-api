@@ -1,0 +1,18 @@
+{
+  "name": "studer-scom-api-documentation",
+  "description": "API Documentation for the Studer SCOM API Project",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "debug": "npm run lint && npm run build && npm run start",
+    "start": "node index.js",
+    "validate": "swagger-cli validate openapi.yaml",
+    "lint": "speccy lint openapi.yaml -s openapi-tags -s path-keys-no-trailing-slash -s operation-summary-or- description -s default-and-example-are-redundant",
+    "build": "swagger-cli bundle -o openapi.json openapi.yaml"
+  },
+  "dependencies": {
+    "speccy": "^0.11.0",
+    "swagger-cli": "^2.3.0",
+    "swagger-ui-express": "^4.0.7"
+  }
+}
