@@ -784,6 +784,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/Value'
         - properties:
+            format:
+              example: BOOL
             data:
               type: boolean
               description: scom bool value
@@ -795,6 +797,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/Value'
         - properties:
+            format:
+              example: FLOAT
             data:
               type: number
               description: scom float value
@@ -806,6 +810,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/Value'
         - properties:
+            format:
+              example: INT32
             data:
               type: integer
               description: scom int32 value
@@ -817,6 +823,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/Value'
         - properties:
+            format:
+              example: SHORT_ENUM
             data:
               type: integer
               description: scom short enum value
@@ -828,6 +836,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/Value'
         - properties:
+            format:
+              example: LONG_ENUM
             data:
               type: integer
               description: scom long enum value
