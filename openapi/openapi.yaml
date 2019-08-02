@@ -172,15 +172,6 @@ paths:
           schema:
             type: integer
             example: 3000
-        - name: format
-          in: query
-          description: Format of the objects property data
-          style: form
-          required: true
-          schema:
-            example: FLOAT
-            allOf:
-              - $ref: '#/components/schemas/ScomDataType'
       requestBody:
         description: A JSON Object containing the parameter object value to be written
         content:
@@ -292,15 +283,6 @@ paths:
           schema:
             type: integer
             example: 3000
-        - name: format
-          in: query
-          description: Format of the objects property data
-          style: form
-          required: true
-          schema:
-            example: FLOAT
-            allOf:
-              - $ref: '#/components/schemas/ScomDataType'
       requestBody:
         description: A JSON Object containing the parameter object value to be written
         content:
@@ -412,15 +394,6 @@ paths:
           schema:
             type: integer
             example: 3000
-        - name: format
-          in: query
-          description: Format of the objects property data
-          style: form
-          required: true
-          schema:
-            example: FLOAT
-            allOf:
-              - $ref: '#/components/schemas/ScomDataType'
       requestBody:
         description: A JSON Object containing the parameter object value to be written
         content:
@@ -532,15 +505,6 @@ paths:
           schema:
             type: integer
             example: 3000
-        - name: format
-          in: query
-          description: Format of the objects property data
-          style: form
-          required: true
-          schema:
-            example: FLOAT
-            allOf:
-              - $ref: '#/components/schemas/ScomDataType'
       requestBody:
         description: A JSON Object containing the parameter object value to be written
         content:
@@ -575,7 +539,87 @@ paths:
               schema:
                 allOf:
                   - $ref: '#/components/schemas/ApiError'
-
+  /devices/{device_id}/parameters/{object_id}/level:
+    get:
+      summary: Returns the current level of the parameter object with the given id
+      operationId: GetParameterLevel
+      tags:
+        - Parameters
+      description: Returns the level of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+      responses:
+        '200':
+          description: A JSON Object containing the requested parameter object value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortEnumValue'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+    put:
+      summary: Updates the level of the parameter object with the given id
+      operationId: UpdateParameterLevel
+      tags:
+        - Parameters
+      description: Updates the level of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+      requestBody:
+        description: A JSON Object containing the parameter object value to be written
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShortEnumValue'
+      responses:
+        '200':
+          description: A JSON Object containing the updated parameter object value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortEnumValue'
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
 components:
   schemas:
     ApiError:
