@@ -335,6 +335,246 @@ paths:
               schema:
                 allOf:
                   - $ref: '#/components/schemas/ApiError'
+  /devices/{device_id}/parameters/{object_id}/min-value:
+    get:
+      summary: Returns the current min value of the parameter object with the given id
+      operationId: GetMinParameterValue
+      tags:
+        - Parameters
+      description: Returns the min value of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+        - name: format
+          in: query
+          description: Format of the objects property data
+          style: form
+          required: true
+          schema:
+            example: FLOAT
+            allOf:
+              - $ref: '#/components/schemas/ScomDataType'
+      responses:
+        '200':
+          description: A JSON Object containing the requested parameter object value
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BoolValue'
+                  - $ref: '#/components/schemas/FloatValue'
+                  - $ref: '#/components/schemas/Int32Value'
+                  - $ref: '#/components/schemas/ShortEnumValue'
+                  - $ref: '#/components/schemas/LongEnumValue'
+                discriminator:
+                  propertyName: format
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+    put:
+      summary: Updates the min value of the parameter object with the given id
+      operationId: UpdateMinParameterValue
+      tags:
+        - Parameters
+      description: Updates the min value of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+        - name: format
+          in: query
+          description: Format of the objects property data
+          style: form
+          required: true
+          schema:
+            example: FLOAT
+            allOf:
+              - $ref: '#/components/schemas/ScomDataType'
+      requestBody:
+        description: A JSON Object containing the parameter object value to be written
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/BoolValue'
+                - $ref: '#/components/schemas/FloatValue'
+                - $ref: '#/components/schemas/Int32Value'
+                - $ref: '#/components/schemas/ShortEnumValue'
+                - $ref: '#/components/schemas/LongEnumValue'
+              discriminator:
+                propertyName: format
+      responses:
+        '200':
+          description: A JSON Object containing the updated parameter object value
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BoolValue'
+                  - $ref: '#/components/schemas/FloatValue'
+                  - $ref: '#/components/schemas/Int32Value'
+                  - $ref: '#/components/schemas/ShortEnumValue'
+                  - $ref: '#/components/schemas/LongEnumValue'
+                discriminator:
+                  propertyName: format
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+  /devices/{device_id}/parameters/{object_id}/max-value:
+    get:
+      summary: Returns the current max value of the parameter object with the given id
+      operationId: GetMaxParameterValue
+      tags:
+        - Parameters
+      description: Returns the max value of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+        - name: format
+          in: query
+          description: Format of the objects property data
+          style: form
+          required: true
+          schema:
+            example: FLOAT
+            allOf:
+              - $ref: '#/components/schemas/ScomDataType'
+      responses:
+        '200':
+          description: A JSON Object containing the requested parameter object value
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BoolValue'
+                  - $ref: '#/components/schemas/FloatValue'
+                  - $ref: '#/components/schemas/Int32Value'
+                  - $ref: '#/components/schemas/ShortEnumValue'
+                  - $ref: '#/components/schemas/LongEnumValue'
+                discriminator:
+                  propertyName: format
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
+    put:
+      summary: Updates the max value of the parameter object with the given id
+      operationId: UpdateMaxParameterValue
+      tags:
+        - Parameters
+      description: Updates the max value of the parameter object with the given id
+      parameters:
+        - name: device_id
+          in: path
+          description: Id of the device
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - name: object_id
+          in: path
+          description: Id of the object
+          style: simple
+          required: true
+          schema:
+            type: integer
+            example: 3000
+        - name: format
+          in: query
+          description: Format of the objects property data
+          style: form
+          required: true
+          schema:
+            example: FLOAT
+            allOf:
+              - $ref: '#/components/schemas/ScomDataType'
+      requestBody:
+        description: A JSON Object containing the parameter object value to be written
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/BoolValue'
+                - $ref: '#/components/schemas/FloatValue'
+                - $ref: '#/components/schemas/Int32Value'
+                - $ref: '#/components/schemas/ShortEnumValue'
+                - $ref: '#/components/schemas/LongEnumValue'
+              discriminator:
+                propertyName: format
+      responses:
+        '200':
+          description: A JSON Object containing the updated parameter object value
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BoolValue'
+                  - $ref: '#/components/schemas/FloatValue'
+                  - $ref: '#/components/schemas/Int32Value'
+                  - $ref: '#/components/schemas/ShortEnumValue'
+                  - $ref: '#/components/schemas/LongEnumValue'
+                discriminator:
+                  propertyName: format
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiError'
 
 components:
   schemas:
